@@ -13,8 +13,8 @@ global.SubmitNewEmailForm = (formData) => {
 
     const emailCount = parseInt(String(scriptProps.getProperty('EMAIL_COUNT')));
     
-    sheet.getRange(emailCount, 1).setValue(formData.newEmail);
-    sheet.getRange(emailCount, 2).setValue(false);
+    sheet.getRange(emailCount+1, 1).setValue(formData.email);
+    sheet.getRange(emailCount+1, 2).setValue(false);
 
     scriptProps.setProperty('EMAIL_COUNT', String(emailCount+1));
 }
