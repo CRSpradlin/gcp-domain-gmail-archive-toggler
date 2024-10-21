@@ -1,3 +1,5 @@
+const LABEL_NAME = "CSAutoArchived";
+const EMAIL_FILTER_PROP_KEY = 'EMAIL_FILTER_ID';
 
 // @ts-ignore
 global.doGet = (e) => {
@@ -5,10 +7,12 @@ global.doGet = (e) => {
 };
 
 // @ts-ignore
-global.SubmitNewEmailForm = (formData) => {
-    const LABEL_NAME = "CSAutoArchived";
-    const EMAIL_FILTER_PROP_KEY = 'EMAIL_FILTER_ID';
+global.GetEmailList = () => {
+    return getExistingEmailData()
+}
 
+// @ts-ignore
+global.SubmitNewEmailForm = (formData) => {
     const scriptProps = PropertiesService.getScriptProperties();
 
     const sheetId = String(scriptProps.getProperty('MAIN_SHEET_ID'));
@@ -19,6 +23,23 @@ global.SubmitNewEmailForm = (formData) => {
     if (emailCountStr) {
         emailCount = parseInt(String(emailCountStr));
     }
+
+    const emailList = getExistingEmailData();
+    console.log({formData}, [formData.email, formData.archived && formData.archived == "on"]);
+    emailList.push([formData.email, formData.archived && formData.archived == "on"]);
+
+    updateGmailFilter(emailList);
+
+    sheet.getRange(emailCount+1, 1).setValue(formData.email);
+    sheet.getRange(emailCount+1, 2).setValue(formData.archived && formData.archived == "on" ? true : false);
+
+    scriptProps.setProperty('EMAIL_COUNT', String(emailCount+1));
+
+    return emailList;
+}
+
+const updateGmailFilter = (emailList) => {
+    const scriptProps = PropertiesService.getScriptProperties();
 
     const labels = Gmail.Users?.Labels?.list("me").labels?.filter(label => label.name == LABEL_NAME);
     let label = labels && labels.length > 0 ? labels[0] : undefined;
@@ -34,14 +55,9 @@ global.SubmitNewEmailForm = (formData) => {
         scriptProps.deleteProperty(EMAIL_FILTER_PROP_KEY);
     }
     console.log({filterIdStr});
-
-    //TODO: Move the getExistingEmailData call to separate variable to add just created email entry into array list.
-    const emailList = getExistingEmailData();
-    console.log({formData}, [formData.email, formData.archived && formData.archived == "on"]);
-    emailList.push([formData.email, formData.archived && formData.archived == "on"])
     const newFilter = Gmail.Users?.Settings?.Filters?.create({
         criteria: {
-            to: `{${emailList.map(emailRow => Boolean(emailRow[1]) ? emailRow[0] : undefined).join(',')}}`
+            to: `{${emailList.filter(emailRow => Boolean(emailRow[1])==true).map(emailRow => emailRow[0]).join(',')}}`
         },
         action: {
             addLabelIds: [
@@ -53,31 +69,17 @@ global.SubmitNewEmailForm = (formData) => {
         }
     }, "me");
     console.log({newFilter});
-
     scriptProps.setProperty(EMAIL_FILTER_PROP_KEY, newFilter?.id || 'Filter Created');
-
-
-    sheet.getRange(emailCount+1, 1).setValue(formData.email);
-    sheet.getRange(emailCount+1, 2).setValue(formData.archived && formData.archived == "on");
-
-    scriptProps.setProperty('EMAIL_COUNT', String(emailCount+1));
-}
+} 
 
 // @ts-ignore
-global.ToggleEmail = (formData) => {
-    const response = toggleEmail(formData.email);
-    if (response != -1) {
-        return true;
-    }
-    return false;
+global.ToggleEmail = (email) => {
+    const response = toggleEmail(email);
+    console.log({toggleResponse: response});
+    return response;
 }
 
 const toggleEmail = (emailToFind) => {
-    const scriptProps = PropertiesService.getScriptProperties();
-
-    const sheetId = String(scriptProps.getProperty('MAIN_SHEET_ID'));
-    const sheet = SpreadsheetApp.openById(sheetId).getSheets()[0];
-
     const emailData = getExistingEmailData();
 
     for (let rowIndex in emailData) {
@@ -85,11 +87,14 @@ const toggleEmail = (emailToFind) => {
         const toggled = Boolean(emailData[rowIndex][1]);
         
         if (email == emailToFind) {
-            emailData[rowIndex][1] = String(!toggled);
+            emailData[rowIndex][1] = !toggled;
         }
     }
 
-    return -1;
+    updateGmailFilter(emailData);
+    saveEmailData(emailData);
+
+    return emailData;
 }
 
 const getExistingEmailData = () => {
@@ -103,4 +108,16 @@ const getExistingEmailData = () => {
 
     const currentEmailValues = sheet.getRange(1, 1, emailCount, 2).getValues();
     return currentEmailValues;
+}
+
+const saveEmailData = (data) => {
+    const scriptProps = PropertiesService.getScriptProperties();
+
+    const sheetId = String(scriptProps.getProperty('MAIN_SHEET_ID'));
+    const sheet = SpreadsheetApp.openById(sheetId).getSheets()[0];
+    
+    scriptProps.setProperty('EMAIL_COUNT', data.length);
+    if (data.length == 0) return [];
+
+    return sheet.getRange(1, 1, data.length, 2).setValues(data);
 }
