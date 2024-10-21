@@ -1,4 +1,5 @@
 import React from "react";
+import { ToggleSwitch } from "./toggleSwitch";
 
 export class Root extends React.Component {
 
@@ -93,6 +94,10 @@ export class Root extends React.Component {
 						<input id="submit" type="submit" value={this.state.loading?"Submitting...":"Submit"} disabled={this.state.loading} className={`w-[10rem] ${this.state.loading ? 'bg-indigo-500' : ' bg-indigo-800 hover:bg-indigo-500'} px-5 py-2 text-sm rounded-full font-semibold text-white`}/>
 					</div>
 				</form>
+				
+				<div>
+					<ToggleSwitch enabled={false} onChange={(newValue) => console.log({newValue})} />
+				</div>
 
 				<div>
 					{this.state.emailList.map(emailItem => (
