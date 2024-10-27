@@ -88,7 +88,7 @@ export class Root extends React.Component {
 					</div>
 					<div className="mt-10 flex flex-row items-center place-itmes-center">
 						<span>Archive Incoming Messsages: </span>
-						<ToggleSwitch enabled={this.state.archivedValue} onChange={(newValue) => this.setState({ archivedValue: newValue })} />
+						<ToggleSwitch disabled={this.state.loading} toggled={this.state.archivedValue} onChange={(newValue) => this.setState({ archivedValue: newValue })} />
 					</div>
 					<div className="mt-5">
 						<input id="submit" type="submit" value={this.state.loading?"Submitting...":"Submit"} disabled={this.state.loading} className={`w-[10rem] ${this.state.loading ? 'bg-teal-500' : ' bg-teal-800 hover:bg-teal-500'} px-5 py-2 text-sm rounded-full font-semibold text-white`}/>
@@ -99,7 +99,7 @@ export class Root extends React.Component {
 					{this.state.emailList.map(emailItem => (
 						<div className="flex flex-row items-center place-items-center">
 							<span>{emailItem[0]}: </span>
-							<ToggleSwitch enabled={Boolean(emailItem[1])} onChange={(newValue) => console.log({newValue})} />
+							<ToggleSwitch disabled={this.state.loading} toggled={Boolean(emailItem[1])} onChange={() => this.handleToggleSubmit(emailItem[0])} />
 						</div>
 					))}
 				</div>

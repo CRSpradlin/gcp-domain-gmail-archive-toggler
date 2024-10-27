@@ -3,14 +3,15 @@ import React from "react";
 import "./toggleSwitch.css"
 
 type ToggleSwitchProps = {
-    enabled: boolean,
-    onChange: (newValue: boolean) => void
+    toggled: boolean,
+    onChange: (newValue: boolean) => void,
+	disabled: boolean
 }
 
 export class ToggleSwitch extends React.Component<ToggleSwitchProps> {
 
 	state = {
-		enabled: false,
+		toggled: false
 	}
 
 	constructor(props) {
@@ -18,21 +19,24 @@ export class ToggleSwitch extends React.Component<ToggleSwitchProps> {
 	}
 
 	public componentDidMount = () => {
-        this.setState({ enabled: this.props.enabled })
-		console.log(this.props.enabled)
+        this.setState({ 
+			toggled: this.props.toggled
+		})
 	};
 
     onClickHandler = () => {
-        this.props.onChange(!this.state.enabled)
-        this.setState({ enabled: !this.state.enabled })
+		if (!this.props.disabled) {
+			this.props.onChange(!this.state.toggled)
+			this.setState({ toggled: !this.state.toggled })
+		}
     }
 
 	public render() {
 		return (
 			<div className="toggleBox flex flex-col items-start h-3.5 w-6 rounded-full border border-teal-950" onClick={() => this.onClickHandler()}>
-                <div className={"togglePin h-3 w-3 rounded-full " + (this.state.enabled ? "togglePin-enabled bg-teal-400":"togglePin-disabled bg-teal-800")}>
+                <div className={"togglePin h-3 w-3 rounded-full " + (this.state.toggled ? "togglePin-toggled bg-teal-400":"togglePin-untoggled bg-teal-800") + (this.props.disabled ? " !bg-slate-500" : "")}>
                 </div>
-				<input className="hidden" name="archived" checked={this.state.enabled} type="checkbox" />
+				<input className="hidden" name="archived" checked={this.state.toggled} type="checkbox" />
 			</div>
 		);
 	}
