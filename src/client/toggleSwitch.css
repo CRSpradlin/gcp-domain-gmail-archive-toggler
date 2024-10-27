@@ -1,5 +1,5 @@
 .togglePin {
-    transition: transform .5s ease-in-out;
+    transition: all .5s ease-in-out;
     position: relative;
  }
  
