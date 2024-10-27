@@ -78,7 +78,15 @@ export class Root extends React.Component {
 	public render() {
 		return (
 			<div className="h-full flex flex-col text-teal-950">
-				<form className="flex flex-col mt-10 mr-auto ml-auto items-center" id="emailForm" onSubmit={this.handleEmailSubmit}>
+				<div className="flex flex-row items-center p-5">
+					<div className="flex flex-row items-start w-1/2">
+						<span className="text-4xl">eArchiver</span>
+					</div>
+					<div className="flex flex-row-reverse w-1/2">
+						<span className="text-teal-400 text-lg"><a className="no-underline" href="https://crspradlin.dev" target="_new">crspradlin</a></span>
+					</div>
+				</div>
+				<form className="flex flex-col mt-15 mr-auto ml-auto items-center" id="emailForm" onSubmit={this.handleEmailSubmit}>
 					<div>
 						<h1 className="text-xl">Add New Email</h1>
 					</div>

@@ -3,7 +3,7 @@ const EMAIL_FILTER_PROP_KEY = 'EMAIL_FILTER_ID';
 
 // @ts-ignore
 global.doGet = (e) => {
-    return HtmlService.createHtmlOutputFromFile('dist/index.html').setSandboxMode(HtmlService.SandboxMode.IFRAME).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL).addMetaTag('viewport', 'width=device-width, initial-scale=1').setTitle("GCPReactTemplate");
+    return HtmlService.createHtmlOutputFromFile('dist/index.html').setSandboxMode(HtmlService.SandboxMode.IFRAME).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL).addMetaTag('viewport', 'width=device-width, initial-scale=1').setTitle("eArchiver");
 };
 
 // @ts-ignore

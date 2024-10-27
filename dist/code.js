@@ -27,7 +27,7 @@ function ToggleEmail(email) {}
     /************************************************************************/
     var __webpack_exports__ = {};
     __webpack_require__.g.doGet = function(e) {
-        return HtmlService.createHtmlOutputFromFile("dist/index.html").setSandboxMode(HtmlService.SandboxMode.IFRAME).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL).addMetaTag("viewport", "width=device-width, initial-scale=1").setTitle("GCPReactTemplate");
+        return HtmlService.createHtmlOutputFromFile("dist/index.html").setSandboxMode(HtmlService.SandboxMode.IFRAME).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL).addMetaTag("viewport", "width=device-width, initial-scale=1").setTitle("eArchiver");
     }, __webpack_require__.g.GetEmailList = function() {
         return getExistingEmailData();
     }, __webpack_require__.g.SubmitNewEmailForm = function(formData) {
