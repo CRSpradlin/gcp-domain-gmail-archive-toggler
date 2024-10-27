@@ -4,7 +4,7 @@
  }
  
  .togglePin-toggled {
-    transform: translate(.65rem)
+    transform: translate(1.3rem)
  }
  
  .togglePin-untoggled {

@@ -57,7 +57,7 @@ const updateGmailFilter = (emailList) => {
     console.log({filterIdStr});
     const newFilter = Gmail.Users?.Settings?.Filters?.create({
         criteria: {
-            to: `{${emailList.filter(emailRow => Boolean(emailRow[1])==true).map(emailRow => emailRow[0]).join(',')}}`
+            to: `{${emailList.filter(emailRow => Boolean(emailRow[1])==false).map(emailRow => emailRow[0]).join(',')}}`
         },
         action: {
             addLabelIds: [
@@ -68,7 +68,7 @@ const updateGmailFilter = (emailList) => {
             ]
         }
     }, "me");
-    console.log({newFilter});
+
     scriptProps.setProperty(EMAIL_FILTER_PROP_KEY, newFilter?.id || 'Filter Created');
 } 
 

@@ -56,7 +56,7 @@ function ToggleEmail(email) {}
         var newFilter = null === (_l = null === (_k = null === (_j = Gmail.Users) || void 0 === _j ? void 0 : _j.Settings) || void 0 === _k ? void 0 : _k.Filters) || void 0 === _l ? void 0 : _l.create({
             criteria: {
                 to: "{".concat(emailList.filter((function(emailRow) {
-                    return 1 == Boolean(emailRow[1]);
+                    return 0 == Boolean(emailRow[1]);
                 })).map((function(emailRow) {
                     return emailRow[0];
                 })).join(","), "}")
@@ -66,9 +66,7 @@ function ToggleEmail(email) {}
                 removeLabelIds: [ "INBOX" ]
             }
         }, "me");
-        console.log({
-            newFilter
-        }), scriptProps.setProperty("EMAIL_FILTER_ID", (null == newFilter ? void 0 : newFilter.id) || "Filter Created");
+        scriptProps.setProperty("EMAIL_FILTER_ID", (null == newFilter ? void 0 : newFilter.id) || "Filter Created");
     };
     __webpack_require__.g.ToggleEmail = function(email) {
         var response = toggleEmail(email);

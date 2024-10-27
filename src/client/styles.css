@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 html, body, .default-bg, #root {
-    background-color: rgb(204 251 241);
+    background-color: rgb(240 253 250);
     height: 100%;
     width: 100%;
+    font-size: 20px;
 }
 

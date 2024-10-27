@@ -77,8 +77,8 @@ export class Root extends React.Component {
 
 	public render() {
 		return (
-			<div className="h-full flex flex-col content-center items-center text-teal-950">
-				<form className="flex flex-col m-auto items-center" id="emailForm" onSubmit={this.handleEmailSubmit}>
+			<div className="h-full flex flex-col text-teal-950">
+				<form className="flex flex-col mt-10 mr-auto ml-auto items-center" id="emailForm" onSubmit={this.handleEmailSubmit}>
 					<div>
 						<h1 className="text-xl">Add New Email</h1>
 					</div>
@@ -87,7 +87,7 @@ export class Root extends React.Component {
 						<input name="email" value={this.state.emailValue} onChange={(e) => this.setState({ emailValue: e.target.value })} type="text" required/>
 					</div>
 					<div className="mt-10 flex flex-row items-center place-itmes-center">
-						<span>Archive Incoming Messsages: </span>
+						<span className="mr-1">Show Email in Inbox?:</span>
 						<ToggleSwitch disabled={this.state.loading} toggled={this.state.archivedValue} onChange={(newValue) => this.setState({ archivedValue: newValue })} />
 					</div>
 					<div className="mt-5">
@@ -95,10 +95,10 @@ export class Root extends React.Component {
 					</div>
 				</form>
 
-				<div className="flex flex-col">
+				<div className="flex flex-col mt-20 mb-auto ml-auto mr-auto">
 					{this.state.emailList.map(emailItem => (
-						<div className="flex flex-row items-center place-items-center">
-							<span>{emailItem[0]}: </span>
+						<div className="flex flex-row m-2 items-center place-items-center">
+							<span className="mr-1">{emailItem[0]}:</span>
 							<ToggleSwitch disabled={this.state.loading} toggled={Boolean(emailItem[1])} onChange={() => this.handleToggleSubmit(emailItem[0])} />
 						</div>
 					))}
