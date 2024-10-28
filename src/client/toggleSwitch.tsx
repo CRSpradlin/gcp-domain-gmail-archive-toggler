@@ -22,7 +22,13 @@ export class ToggleSwitch extends React.Component<ToggleSwitchProps> {
         this.setState({ 
 			toggled: this.props.toggled
 		})
-	};
+	}
+
+	public componentDidUpdate(prevProps) {
+		if (this.props.toggled !== prevProps.toggled) {
+			this.setState({ toggled: this.props.toggled })
+		}
+	}
 
     onClickHandler = () => {
 		if (!this.props.disabled) {

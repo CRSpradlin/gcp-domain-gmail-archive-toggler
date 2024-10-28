@@ -6811,7 +6811,11 @@
                     }));
                 }, _this;
             }
-            return __extends(ToggleSwitch, _super), ToggleSwitch.prototype.render = function() {
+            return __extends(ToggleSwitch, _super), ToggleSwitch.prototype.componentDidUpdate = function(prevProps) {
+                this.props.toggled !== prevProps.toggled && this.setState({
+                    toggled: this.props.toggled
+                });
+            }, ToggleSwitch.prototype.render = function() {
                 var _this = this;
                 return react.createElement("div", {
                     className: "toggleBox flex flex-col items-start h-6.5 w-12 rounded-full border-2 border-teal-950",
@@ -6871,9 +6875,9 @@
                     });
                 }, _this.handleFormSuccess = function(response) {
                     _this.setState({
-                        loading: !1,
-                        emailList: response
-                    }), alert("Request Successful!");
+                        emailList: response,
+                        loading: !1
+                    });
                 }, _this.handleToggleSuccess = function(response) {
                     _this.setState({
                         loading: !1,

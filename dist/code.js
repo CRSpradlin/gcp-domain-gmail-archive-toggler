@@ -29,17 +29,22 @@ function ToggleEmail(email) {}
     __webpack_require__.g.doGet = function(e) {
         return HtmlService.createHtmlOutputFromFile("dist/index.html").setSandboxMode(HtmlService.SandboxMode.IFRAME).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL).addMetaTag("viewport", "width=device-width, initial-scale=1").setTitle("eArchiver");
     }, __webpack_require__.g.GetEmailList = function() {
-        return getExistingEmailData();
+        var emailList = getExistingEmailData();
+        return emailList.sort((function(a, b) {
+            return a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1;
+        })), emailList;
     }, __webpack_require__.g.SubmitNewEmailForm = function(formData) {
         var scriptProps = PropertiesService.getScriptProperties(), sheetId = String(scriptProps.getProperty("MAIN_SHEET_ID")), sheet = SpreadsheetApp.openById(sheetId).getSheets()[0], emailCountStr = scriptProps.getProperty("EMAIL_COUNT"), emailCount = 0;
         emailCountStr && (emailCount = parseInt(String(emailCountStr)));
         var emailList = getExistingEmailData();
-        return console.log({
+        console.log({
             formData
-        }, [ formData.email, formData.archived && "on" == formData.archived ]), emailList.push([ formData.email, formData.archived && "on" == formData.archived ]), 
-        updateGmailFilter(emailList), sheet.getRange(emailCount + 1, 1).setValue(formData.email), 
-        sheet.getRange(emailCount + 1, 2).setValue(!(!formData.archived || "on" != formData.archived)), 
-        scriptProps.setProperty("EMAIL_COUNT", String(emailCount + 1)), emailList;
+        }, [ formData.email, Boolean(formData.archived && "on" == formData.archived) ]);
+        var newEmailRow = [ formData.email, Boolean(formData.archived && "on" == formData.archived), "christopher.ray.spradlin@gmail.com", "" ];
+        return emailList.push(newEmailRow), updateGmailFilter(emailList), sheet.getRange(emailCount + 2, 1, 1, 4).setValues([ newEmailRow ]), 
+        scriptProps.setProperty("EMAIL_COUNT", String(emailCount + 1)), emailList.sort((function(a, b) {
+            return a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1;
+        })), emailList;
     };
     var updateGmailFilter = function(emailList) {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, scriptProps = PropertiesService.getScriptProperties(), labels = null === (_c = null === (_b = null === (_a = Gmail.Users) || void 0 === _a ? void 0 : _a.Labels) || void 0 === _b ? void 0 : _b.list("me").labels) || void 0 === _c ? void 0 : _c.filter((function(label) {
@@ -70,9 +75,9 @@ function ToggleEmail(email) {}
     };
     __webpack_require__.g.ToggleEmail = function(email) {
         var response = toggleEmail(email);
-        return console.log({
-            toggleResponse: response
-        }), response;
+        return response.sort((function(a, b) {
+            return a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1;
+        })), response;
     };
     var toggleEmail = function(emailToFind) {
         var emailData = getExistingEmailData();
@@ -83,14 +88,10 @@ function ToggleEmail(email) {}
         return updateGmailFilter(emailData), saveEmailData(emailData), emailData;
     }, getExistingEmailData = function() {
         var scriptProps = PropertiesService.getScriptProperties(), sheetId = String(scriptProps.getProperty("MAIN_SHEET_ID")), sheet = SpreadsheetApp.openById(sheetId).getSheets()[0], emailCount = parseInt(String(scriptProps.getProperty("EMAIL_COUNT")));
-        if (0 == emailCount) return [];
-        var currentEmailValues = sheet.getRange(2, 1, emailCount, 2).getValues();
-        return currentEmailValues.sort((function(a, b) {
-            return a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1;
-        })), currentEmailValues;
+        return 0 == emailCount ? [] : sheet.getRange(2, 1, emailCount, 4).getValues();
     }, saveEmailData = function(data) {
         var scriptProps = PropertiesService.getScriptProperties(), sheetId = String(scriptProps.getProperty("MAIN_SHEET_ID")), sheet = SpreadsheetApp.openById(sheetId).getSheets()[0];
-        return scriptProps.setProperty("EMAIL_COUNT", data.length), 0 == data.length ? [] : sheet.getRange(2, 1, data.length, 2).setValues(data);
+        return scriptProps.setProperty("EMAIL_COUNT", data.length), 0 == data.length ? [] : sheet.getRange(2, 1, data.length, 4).setValues(data);
     };
     for (var i in __webpack_exports__) this[i] = __webpack_exports__[i];
     __webpack_exports__.__esModule && Object.defineProperty(this, "__esModule", {

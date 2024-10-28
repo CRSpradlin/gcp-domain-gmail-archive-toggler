@@ -8,7 +8,9 @@ global.doGet = (e) => {
 
 // @ts-ignore
 global.GetEmailList = () => {
-    return getExistingEmailData()
+    const emailList = getExistingEmailData();
+    emailList.sort((a, b) => a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1);
+    return emailList;
 }
 
 // @ts-ignore
@@ -25,16 +27,17 @@ global.SubmitNewEmailForm = (formData) => {
     }
 
     const emailList = getExistingEmailData();
-    console.log({formData}, [formData.email, formData.archived && formData.archived == "on"]);
-    emailList.push([formData.email, formData.archived && formData.archived == "on"]);
+    console.log({formData}, [formData.email, Boolean(formData.archived && formData.archived == "on")]);
+    const newEmailRow = [formData.email, Boolean(formData.archived && formData.archived == "on"), "christopher.ray.spradlin@gmail.com", ""];
+    emailList.push(newEmailRow);
 
     updateGmailFilter(emailList);
 
-    sheet.getRange(emailCount+1, 1).setValue(formData.email);
-    sheet.getRange(emailCount+1, 2).setValue(formData.archived && formData.archived == "on" ? true : false);
+    sheet.getRange(emailCount+2, 1, 1, 4).setValues([newEmailRow]);
 
     scriptProps.setProperty('EMAIL_COUNT', String(emailCount+1));
 
+    emailList.sort((a, b) => a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1);
     return emailList;
 }
 
@@ -75,7 +78,7 @@ const updateGmailFilter = (emailList) => {
 // @ts-ignore
 global.ToggleEmail = (email) => {
     const response = toggleEmail(email);
-    console.log({toggleResponse: response});
+    response.sort((a, b) => a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1);
     return response;
 }
 
@@ -106,9 +109,8 @@ const getExistingEmailData = () => {
     const emailCount = parseInt(String(scriptProps.getProperty('EMAIL_COUNT')));
     if (emailCount == 0) return [];
 
-    const currentEmailValues = sheet.getRange(2, 1, emailCount, 2).getValues();
+    const currentEmailValues = sheet.getRange(2, 1, emailCount, 4).getValues();
 
-    currentEmailValues.sort((a, b) => a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1);
     return currentEmailValues;
 }
 
@@ -121,5 +123,5 @@ const saveEmailData = (data) => {
     scriptProps.setProperty('EMAIL_COUNT', data.length);
     if (data.length == 0) return [];
 
-    return sheet.getRange(2, 1, data.length, 2).setValues(data);
+    return sheet.getRange(2, 1, data.length, 4).setValues(data);
 }

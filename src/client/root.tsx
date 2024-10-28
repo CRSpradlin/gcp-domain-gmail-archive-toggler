@@ -39,12 +39,11 @@ export class Root extends React.Component {
 	}
 
 	public handleFormSuccess = (response) => {
-		this.setState({ loading: false, emailList: response });
-		alert('Request Successful!');
+		this.setState({ emailList: response, loading: false });
 	}
 
 	public handleToggleSuccess = (response) => {
-		this.setState({ loading: false, emailList: response })
+		this.setState({ loading: false, emailList: response });
 	}
 
 	public handleFailure = () => {
