@@ -106,7 +106,9 @@ const getExistingEmailData = () => {
     const emailCount = parseInt(String(scriptProps.getProperty('EMAIL_COUNT')));
     if (emailCount == 0) return [];
 
-    const currentEmailValues = sheet.getRange(1, 1, emailCount, 2).getValues();
+    const currentEmailValues = sheet.getRange(2, 1, emailCount, 2).getValues();
+
+    currentEmailValues.sort((a, b) => a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1);
     return currentEmailValues;
 }
 
@@ -119,5 +121,5 @@ const saveEmailData = (data) => {
     scriptProps.setProperty('EMAIL_COUNT', data.length);
     if (data.length == 0) return [];
 
-    return sheet.getRange(1, 1, data.length, 2).setValues(data);
+    return sheet.getRange(2, 1, data.length, 2).setValues(data);
 }

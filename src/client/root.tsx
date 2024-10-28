@@ -106,8 +106,8 @@ export class Root extends React.Component {
 				<div className="flex flex-col mt-20 mb-auto ml-auto mr-auto">
 					{this.state.emailList.map(emailItem => (
 						<div className="flex flex-row m-2 items-center place-items-center">
-							<span className="mr-1">{emailItem[0]}:</span>
 							<ToggleSwitch disabled={this.state.loading} toggled={Boolean(emailItem[1])} onChange={() => this.handleToggleSubmit(emailItem[0])} />
+							<span className="ml-2">{emailItem[0]}</span>
 						</div>
 					))}
 				</div>

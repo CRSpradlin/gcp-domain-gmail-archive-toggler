@@ -83,10 +83,14 @@ function ToggleEmail(email) {}
         return updateGmailFilter(emailData), saveEmailData(emailData), emailData;
     }, getExistingEmailData = function() {
         var scriptProps = PropertiesService.getScriptProperties(), sheetId = String(scriptProps.getProperty("MAIN_SHEET_ID")), sheet = SpreadsheetApp.openById(sheetId).getSheets()[0], emailCount = parseInt(String(scriptProps.getProperty("EMAIL_COUNT")));
-        return 0 == emailCount ? [] : sheet.getRange(1, 1, emailCount, 2).getValues();
+        if (0 == emailCount) return [];
+        var currentEmailValues = sheet.getRange(2, 1, emailCount, 2).getValues();
+        return currentEmailValues.sort((function(a, b) {
+            return a[0] == b[0] ? 0 : a[0] > b[0] ? 1 : -1;
+        })), currentEmailValues;
     }, saveEmailData = function(data) {
         var scriptProps = PropertiesService.getScriptProperties(), sheetId = String(scriptProps.getProperty("MAIN_SHEET_ID")), sheet = SpreadsheetApp.openById(sheetId).getSheets()[0];
-        return scriptProps.setProperty("EMAIL_COUNT", data.length), 0 == data.length ? [] : sheet.getRange(1, 1, data.length, 2).setValues(data);
+        return scriptProps.setProperty("EMAIL_COUNT", data.length), 0 == data.length ? [] : sheet.getRange(2, 1, data.length, 2).setValues(data);
     };
     for (var i in __webpack_exports__) this[i] = __webpack_exports__[i];
     __webpack_exports__.__esModule && Object.defineProperty(this, "__esModule", {
