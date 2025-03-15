@@ -42,6 +42,9 @@ global.SubmitNewEmailForm = (formData) => {
 }
 
 const updateGmailFilter = (emailList) => {
+    
+    ScriptApp.getOAuthToken();
+    
     const scriptProps = PropertiesService.getScriptProperties();
 
     const labels = Gmail.Users?.Labels?.list("me").labels?.filter(label => label.name == LABEL_NAME);

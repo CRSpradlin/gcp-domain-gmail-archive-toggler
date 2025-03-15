@@ -47,7 +47,9 @@ function ToggleEmail(email) {}
         })), emailList;
     };
     var updateGmailFilter = function(emailList) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, scriptProps = PropertiesService.getScriptProperties(), labels = null === (_c = null === (_b = null === (_a = Gmail.Users) || void 0 === _a ? void 0 : _a.Labels) || void 0 === _b ? void 0 : _b.list("me").labels) || void 0 === _c ? void 0 : _c.filter((function(label) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l;
+        ScriptApp.getOAuthToken();
+        var scriptProps = PropertiesService.getScriptProperties(), labels = null === (_c = null === (_b = null === (_a = Gmail.Users) || void 0 === _a ? void 0 : _a.Labels) || void 0 === _b ? void 0 : _b.list("me").labels) || void 0 === _c ? void 0 : _c.filter((function(label) {
             return "CSAutoArchived" == label.name;
         })), label = labels && labels.length > 0 ? labels[0] : undefined;
         label || (label = null === (_e = null === (_d = Gmail.Users) || void 0 === _d ? void 0 : _d.Labels) || void 0 === _e ? void 0 : _e.create({
